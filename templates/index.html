@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YouTube Downloader</title>
+    <script>
+        function submitForm(event) {
+            event.preventDefault();
+            var url = document.getElementById('url').value;
+            var format = document.getElementById('format').value;
+            fetch('/download', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'url=' + encodeURIComponent(url) + '&format=' + encodeURIComponent(format)
+            }).then(response => response.json())
+              .then(data => {
+                  document.getElementById('status').innerText = 'Download started... Check your downloads folder.';
+              })
+              .catch(error => {
+                  document.getElementById('status').innerText = 'Error starting download.';
+              });
+        }
+    </script>
+</head>
+<body>
+    <h1>YouTube Downloader</h1>
+    <form onsubmit="submitForm(event)">
+        <label for="url">YouTube URL:</label>
+        <input type="text" id="url" name="url"><br><br>
+        <label for="format">Format:</label>
+        <select id="format" name="format">
+            <option value="mp3">MP3</option>
+            <option value="mp4">MP4</option>
+        </select><br><br>
+        <button type="submit">Download</button>
+    </form>
+    <p id="status"></p>
+</body>
+</html>
